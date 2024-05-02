@@ -3,7 +3,7 @@ name: Publish to Crates.io
 # On release
 on:
   release:
-    types: [published]
+    types: [ published ]
 
 jobs:
   test:
@@ -12,7 +12,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
-      - run: --workspace --all-features --color=always
+        with:
+          toolchain: nightly
+      - run: cargo test --workspace --all-features --color=always
+
+  bench:
+    name: Bench
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: nightly
+      - run: cargo bench --workspace --all-features --color=always
 
   format_check:
     name: Format Check
@@ -36,7 +48,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
-      - run: cargo check--workspace --all-features --color=always
+      - run: cargo check --workspace --all-features --color=always
 
   build:
     name: Build

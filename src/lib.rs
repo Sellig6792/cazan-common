@@ -11,15 +11,19 @@ mod benches {
     extern crate test;
 
     use super::{image::ImageEdgesParser, rdp::rdp, triangulation::triangulate};
-    use test::Bencher;
     use crate::geometry::Triangle;
-
+    use test::Bencher;
 
     #[bench]
     #[cfg_attr(target_arch = "wasm32", ignore)]
     fn image_interpretation(b: &mut Bencher) {
+        if std::env::var("CAZAN_IMAGE_PATH").is_err() {
+            return;
+        }
+
         b.iter(|| {
-            let image = image::open(std::env::var("CAZAN_IMAGE_PATH").expect("CAZAN_IMAGE_PATH not set")).expect("Error opening image");
+            let image = image::open(std::env::var("CAZAN_IMAGE_PATH").unwrap())
+                .expect("Error opening image");
             let edges_parser = ImageEdgesParser::new(image);
             let polygon = edges_parser.as_polygon();
             let rdp_polygon = rdp(&polygon, 1.0);
@@ -34,7 +38,12 @@ mod benches {
 
         #[cfg(not(target_arch = "wasm32"))]
         {
-            let image = image::open(std::env::var("CAZAN_IMAGE_PATH").expect("CAZAN_IMAGE_PATH not set")).expect("Error opening image");
+            if std::env::var("CAZAN_IMAGE_PATH").is_err() {
+                return;
+            }
+
+            let image = image::open(std::env::var("CAZAN_IMAGE_PATH").unwrap())
+                .expect("Error opening image");
             let edges_parser = ImageEdgesParser::new(image);
             let polygon = edges_parser.as_polygon();
             let rdp_polygon = rdp(&polygon, 1.0);
