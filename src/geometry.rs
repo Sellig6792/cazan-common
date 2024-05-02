@@ -19,7 +19,7 @@ impl Point {
     pub fn new(x: u16, y: u16) -> Self {
         Self { x, y }
     }
-    
+
     pub fn right(&self) -> Option<Point> {
         self.x.checked_add(1).map(|x| Self { x, y: self.y })
     }
@@ -65,7 +65,6 @@ impl IntoIterator for Triangle {
         vec![self.0, self.1, self.2].into_iter()
     }
 }
-
 
 impl PartialEq for Triangle {
     fn eq(&self, other: &Self) -> bool {

@@ -1,7 +1,6 @@
 use crate::geometry::*;
 use earcutr::earcut;
 
-
 pub fn triangulate(polygon: &Polygon) -> Result<Vec<Triangle>, earcutr::Error> {
     if polygon.len() < 3 {
         return Ok(vec![Triangle(polygon[0], polygon[1], polygon[2])]);
