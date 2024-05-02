@@ -3,4 +3,17 @@ name = "cazan-common"
 version = "0.1.0"
 edition = "2021"
 
+[features]
+wasm = ["wasm-bindgen"]
+
 [dependencies]
+wasm-bindgen = { version = "0.2.92", optional = true}
+mint = "0.5.9"
+num-integer = "0.1.46"
+image = { version = "0.25.1", default-features = false, features = ["png", "jpeg"] }
+serde_json = { version = "1.0.116"}
+serde = { version = "1.0.199", features = ["derive"] }
+earcutr = "0.4.3"
+
+[dev-dependencies]
+assert_unordered = "0.3.5"
