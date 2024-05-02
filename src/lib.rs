@@ -1,4 +1,4 @@
-#![feature(test)]
+#![cfg_attr(TOOLCHAIN_IS_NIGHTLY, feature(test))]
 #![cfg_attr(target_arch = "wasm32", recursion_limit = "512")]
 
 pub mod geometry;
@@ -29,8 +29,8 @@ mod benches {
 
     #[bench]
     fn minkowski_difference(b: &mut Bencher) {
-        let mut t1: Vec<Triangle> = vec![];
-        let mut t2: Vec<Triangle> = vec![];
+        let t1: Vec<Triangle>;
+        let t2: Vec<Triangle>;
 
         #[cfg(not(target_arch = "wasm32"))]
         {
@@ -38,8 +38,8 @@ mod benches {
             let edges_parser = ImageEdgesParser::new(image);
             let polygon = edges_parser.as_polygon();
             let rdp_polygon = rdp(&polygon, 1.0);
-            let t1 = triangulate(&rdp_polygon).expect("Error triangulating");
-            let t2 = t1.clone();
+            t1 = triangulate(&rdp_polygon).expect("Error triangulating");
+            t2 = t1.clone();
         }
 
         #[cfg(target_arch = "wasm32")]
