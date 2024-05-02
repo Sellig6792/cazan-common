@@ -1,17 +1,20 @@
 [package]
 name = "cazan-common"
-version = "0.1.0"
+description = "The common library to `cazan-cli` and `cazanw`"
+version = "0.1.1"
 edition = "2021"
+license = "MIT"
+authors = ["Gilles Meunier <sellig6792@gmail.com>"]
 
 [features]
 wasm = ["wasm-bindgen"]
 
 [dependencies]
-wasm-bindgen = { version = "0.2.92", optional = true}
+wasm-bindgen = { version = "0.2.92", optional = true }
 mint = "0.5.9"
 num-integer = "0.1.46"
 image = { version = "0.25.1", default-features = false, features = ["png", "jpeg"] }
-serde_json = { version = "1.0.116"}
+serde_json = { version = "1.0.116" }
 serde = { version = "1.0.199", features = ["derive"] }
 earcutr = "0.4.3"
 
