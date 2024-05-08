@@ -4,12 +4,12 @@ use image::GenericImageView;
 
 pub type Grid<T> = Vec<Vec<T>>;
 
-pub struct ImageEdgesParser {
+pub struct ImagePolygon {
     image: image::DynamicImage,
     size: (u16, u16),
 }
 
-impl ImageEdgesParser {
+impl ImagePolygon {
     pub fn new(image: image::DynamicImage) -> Self {
         let dimensions = image.dimensions();
         let size = (dimensions.0 as u16, dimensions.1 as u16);
@@ -79,7 +79,7 @@ impl ImageEdgesParser {
         panic!("No opaque points found");
     }
 
-    pub fn as_polygon(&self) -> Polygon {
+    pub fn to_polygon(&self) -> Polygon {
         let mut points = Vec::new();
         let edge_points = self.get_edges_points();
 
@@ -154,7 +154,7 @@ impl ImageEdgesParser {
     }
 }
 
-impl From<Vec<u8>> for ImageEdgesParser {
+impl From<Vec<u8>> for ImagePolygon {
     fn from(data: Vec<u8>) -> Self {
         Self::new(image::load_from_memory(&data).unwrap())
     }

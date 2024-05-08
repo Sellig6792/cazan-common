@@ -10,7 +10,7 @@ pub mod triangulation;
 mod benches {
     extern crate test;
 
-    use super::{image::ImageEdgesParser, rdp::rdp, triangulation::triangulate};
+    use super::{image::ImagePolygon, rdp::rdp, triangulation::triangulate};
     use crate::geometry::Triangle;
     use test::Bencher;
 
@@ -24,8 +24,7 @@ mod benches {
         b.iter(|| {
             let image = image::open(std::env::var("CAZAN_IMAGE_PATH").unwrap())
                 .expect("Error opening image");
-            let edges_parser = ImageEdgesParser::new(image);
-            let polygon = edges_parser.as_polygon();
+            let polygon = ImagePolygon::new(image).to_polygon();
             let rdp_polygon = rdp(&polygon, 1.0);
             triangulate(&rdp_polygon, None).expect("Error triangulating");
         });
@@ -44,8 +43,7 @@ mod benches {
 
             let image = image::open(std::env::var("CAZAN_IMAGE_PATH").unwrap())
                 .expect("Error opening image");
-            let edges_parser = ImageEdgesParser::new(image);
-            let polygon = edges_parser.as_polygon();
+            let polygon = ImagePolygon::new(image).to_polygon();
             let rdp_polygon = rdp(&polygon, 1.0);
             t1 = triangulate(&rdp_polygon, None).expect("Error triangulating");
             t2 = t1.clone();
