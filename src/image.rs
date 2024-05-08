@@ -112,7 +112,6 @@ impl ImageEdgesParser {
                 .iter()
                 .find(|&point| Some(point) == current_point.left_down().as_ref());
 
-            // log(&format!("right_point: {:?}\nright_up_point: {:?}\nright_down_point: {:?}\nup_point: {:?}\ndown_point: {:?}\nleft_point: {:?}\nleft_up_point: {:?}\nleft_down_point: {:?}", right_point, right_up_point, right_down_point, up_point, down_point, left_point, left_up_point, left_down_point));
             // Check if the point is not the last point of the polygon and if it is not already in the list
             match (
                 right_point,

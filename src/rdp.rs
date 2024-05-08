@@ -1,19 +1,19 @@
 use crate::geometry::{distance, Point, Polygon};
 
 pub fn rdp(polygon: &Polygon, epsilon: f64) -> Polygon {
-    let mut dmax = 0.0;
+    let mut d_max = 0.0;
     let mut index = 0;
     let end = polygon.len() - 1;
 
     for i in 1..end {
         let d = perpendicular_distance(polygon[i], polygon[0], polygon[end]);
-        if d > dmax {
+        if d > d_max {
             index = i;
-            dmax = d;
+            d_max = d;
         }
     }
 
-    if dmax > epsilon {
+    if d_max > epsilon {
         let mut results = rdp(&Vec::from(&polygon[..=index]), epsilon);
         results.pop();
         results.extend(rdp(&Vec::from(&polygon[index..]), epsilon));
