@@ -1,16 +1,27 @@
 use crate::geometry::*;
 use earcutr::earcut;
 
-pub fn triangulate(polygon: &Polygon) -> Result<Vec<Triangle>, earcutr::Error> {
-    if polygon.len() < 3 {
-        return Ok(vec![Triangle(polygon[0], polygon[1], polygon[2])]);
-    }
-
-    let points: Vec<f64> = polygon
+pub fn triangulate(
+    polygon: &Polygon,
+    holes: Option<Vec<Polygon>>,
+) -> Result<Vec<Triangle>, earcutr::Error> {
+    let mut points: Vec<f64> = polygon
         .iter()
         .flat_map(|point| vec![point.x as f64, point.y as f64])
         .collect();
-    let indices = earcut(&points, &[], 2)?;
+    let mut holes_indices: Vec<usize> = vec![];
+
+    if let Some(holes) = holes {
+        for hole in holes {
+            holes_indices.push(points.len());
+            points.extend(
+                hole.iter()
+                    .flat_map(|point| vec![point.x as f64, point.y as f64]),
+            );
+        }
+    }
+
+    let indices = earcut(&points, &holes_indices, 2)?;
 
     Ok(indices
         .chunks(3)
@@ -31,7 +42,7 @@ mod tests {
             Point { x: 2, y: 2 },
         ];
 
-        let triangles = match triangulate(&polygon) {
+        let triangles = match triangulate(&polygon, None) {
             Ok(triangles) => triangles,
             Err(_) => panic!("Error"),
         };
@@ -52,7 +63,7 @@ mod tests {
             Point { x: 1, y: 8 },
         ];
 
-        let triangles = triangulate(&polygon).unwrap();
+        let triangles = triangulate(&polygon, None).unwrap();
 
         assert_eq!(triangles.len(), polygon.len() - 2);
     }
@@ -75,7 +86,7 @@ mod tests {
             Point { x: 2, y: 8 },
         ];
 
-        let triangles = triangulate(&polygon).unwrap();
+        let triangles = triangulate(&polygon, None).unwrap();
 
         assert_eq!(triangles.len(), polygon.len() - 2);
     }
@@ -87,7 +98,7 @@ mod tests {
             Point { x: 3, y: 4 },
             Point { x: 4, y: 0 },
         ];
-        let triangles = match triangulate(&polygon) {
+        let triangles = match triangulate(&polygon, None) {
             Ok(triangles) => triangles,
             Err(_) => panic!("Error"),
         };

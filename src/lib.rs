@@ -27,7 +27,7 @@ mod benches {
             let edges_parser = ImageEdgesParser::new(image);
             let polygon = edges_parser.as_polygon();
             let rdp_polygon = rdp(&polygon, 1.0);
-            triangulate(&rdp_polygon).expect("Error triangulating");
+            triangulate(&rdp_polygon, None).expect("Error triangulating");
         });
     }
 
@@ -47,7 +47,7 @@ mod benches {
             let edges_parser = ImageEdgesParser::new(image);
             let polygon = edges_parser.as_polygon();
             let rdp_polygon = rdp(&polygon, 1.0);
-            t1 = triangulate(&rdp_polygon).expect("Error triangulating");
+            t1 = triangulate(&rdp_polygon, None).expect("Error triangulating");
             t2 = t1.clone();
         }
 
