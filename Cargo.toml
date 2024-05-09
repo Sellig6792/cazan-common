@@ -1,7 +1,7 @@
 [package]
 name = "cazan-common"
 description = "The common library to `cazan-cli` and `cazanw`"
-version = "0.1.1"
+version = "1.0.0"
 edition = "2021"
 license = "MIT"
 authors = ["Gilles Meunier <sellig6792@gmail.com>"]
