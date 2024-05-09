@@ -3,21 +3,26 @@ use earcutr::earcut;
 
 pub fn triangulate(
     polygon: &Polygon,
-    holes: Option<Vec<Polygon>>,
+    holes: &Option<Vec<Polygon>>,
 ) -> Result<Vec<Triangle>, earcutr::Error> {
     let mut points: Vec<f64> = polygon
         .iter()
         .flat_map(|point| vec![point.x as f64, point.y as f64])
         .collect();
-    let mut holes_indices: Vec<usize> = vec![];
+    let mut holes_indices: Vec<usize> = vec![]; // indices of the first point of each hole in the points array
+
+    let mut polygon_with_holes = polygon.clone();
+    // Remove the holes that only have 1 or 2 points
 
     if let Some(holes) = holes {
+        let holes: Vec<&Polygon> = holes.iter().filter(|hole| hole.len() > 2).collect();
         for hole in holes {
-            holes_indices.push(points.len());
             points.extend(
                 hole.iter()
                     .flat_map(|point| vec![point.x as f64, point.y as f64]),
             );
+            holes_indices.push(points.len() / 2 - hole.len());
+            polygon_with_holes.extend(hole);
         }
     }
 
@@ -25,7 +30,13 @@ pub fn triangulate(
 
     Ok(indices
         .chunks(3)
-        .map(|chunk| Triangle(polygon[chunk[0]], polygon[chunk[1]], polygon[chunk[2]]))
+        .map(|chunk| {
+            Triangle(
+                polygon_with_holes[chunk[0]],
+                polygon_with_holes[chunk[1]],
+                polygon_with_holes[chunk[2]],
+            )
+        })
         .collect())
 }
 
@@ -42,7 +53,7 @@ mod tests {
             Point { x: 2, y: 2 },
         ];
 
-        let triangles = match triangulate(&polygon, None) {
+        let triangles = match triangulate(&polygon, &None) {
             Ok(triangles) => triangles,
             Err(_) => panic!("Error"),
         };
@@ -63,7 +74,7 @@ mod tests {
             Point { x: 1, y: 8 },
         ];
 
-        let triangles = triangulate(&polygon, None).unwrap();
+        let triangles = triangulate(&polygon, &None).unwrap();
 
         assert_eq!(triangles.len(), polygon.len() - 2);
     }
@@ -86,7 +97,7 @@ mod tests {
             Point { x: 2, y: 8 },
         ];
 
-        let triangles = triangulate(&polygon, None).unwrap();
+        let triangles = triangulate(&polygon, &None).unwrap();
 
         assert_eq!(triangles.len(), polygon.len() - 2);
     }
@@ -98,7 +109,7 @@ mod tests {
             Point { x: 3, y: 4 },
             Point { x: 4, y: 0 },
         ];
-        let triangles = match triangulate(&polygon, None) {
+        let triangles = match triangulate(&polygon, &None) {
             Ok(triangles) => triangles,
             Err(_) => panic!("Error"),
         };

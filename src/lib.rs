@@ -24,9 +24,10 @@ mod benches {
         b.iter(|| {
             let image = image::open(std::env::var("CAZAN_IMAGE_PATH").unwrap())
                 .expect("Error opening image");
-            let polygon = ImagePolygon::new(image).to_polygon();
+            let (polygon, holes) = ImagePolygon::new(image).to_polygon();
             let rdp_polygon = rdp(&polygon, 1.0);
-            triangulate(&rdp_polygon, None).expect("Error triangulating");
+            let rdp_holes = holes.iter().map(|hole| rdp(hole, 1.0)).collect();
+            triangulate(&rdp_polygon, &Some(rdp_holes)).expect("Error triangulating");
         });
     }
 
@@ -43,9 +44,10 @@ mod benches {
 
             let image = image::open(std::env::var("CAZAN_IMAGE_PATH").unwrap())
                 .expect("Error opening image");
-            let polygon = ImagePolygon::new(image).to_polygon();
+            let (polygon, holes) = ImagePolygon::new(image).to_polygon();
             let rdp_polygon = rdp(&polygon, 1.0);
-            t1 = triangulate(&rdp_polygon, None).expect("Error triangulating");
+            let rdp_holes = holes.iter().map(|hole| rdp(hole, 1.0)).collect();
+            t1 = triangulate(&rdp_polygon, &Some(rdp_holes)).expect("Error triangulating");
             t2 = t1.clone();
         }
 
