@@ -3,7 +3,7 @@ use earcutr::earcut;
 
 pub fn triangulate(
     polygon: &Polygon,
-    holes: &Option<Vec<Polygon>>,
+    holes: Option<&Vec<Polygon>>,
 ) -> Result<Vec<Triangle>, earcutr::Error> {
     let mut points: Vec<f64> = polygon
         .iter()
@@ -53,7 +53,7 @@ mod tests {
             Point { x: 2, y: 2 },
         ];
 
-        let triangles = match triangulate(&polygon, &None) {
+        let triangles = match triangulate(&polygon, None) {
             Ok(triangles) => triangles,
             Err(_) => panic!("Error"),
         };
@@ -74,7 +74,7 @@ mod tests {
             Point { x: 1, y: 8 },
         ];
 
-        let triangles = triangulate(&polygon, &None).unwrap();
+        let triangles = triangulate(&polygon, None).unwrap();
 
         assert_eq!(triangles.len(), polygon.len() - 2);
     }
@@ -97,7 +97,7 @@ mod tests {
             Point { x: 2, y: 8 },
         ];
 
-        let triangles = triangulate(&polygon, &None).unwrap();
+        let triangles = triangulate(&polygon, None).unwrap();
 
         assert_eq!(triangles.len(), polygon.len() - 2);
     }
@@ -109,7 +109,7 @@ mod tests {
             Point { x: 3, y: 4 },
             Point { x: 4, y: 0 },
         ];
-        let triangles = match triangulate(&polygon, &None) {
+        let triangles = match triangulate(&polygon, None) {
             Ok(triangles) => triangles,
             Err(_) => panic!("Error"),
         };

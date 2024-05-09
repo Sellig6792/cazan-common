@@ -26,8 +26,8 @@ mod benches {
                 .expect("Error opening image");
             let (polygon, holes) = ImagePolygon::new(image).to_polygon();
             let rdp_polygon = rdp(&polygon, 1.0);
-            let rdp_holes = holes.iter().map(|hole| rdp(hole, 1.0)).collect();
-            triangulate(&rdp_polygon, &Some(rdp_holes)).expect("Error triangulating");
+            let rdp_holes = &holes.iter().map(|hole| rdp(hole, 1.0)).collect();
+            triangulate(&rdp_polygon, Some(rdp_holes)).expect("Error triangulating");
         });
     }
 
@@ -46,8 +46,8 @@ mod benches {
                 .expect("Error opening image");
             let (polygon, holes) = ImagePolygon::new(image).to_polygon();
             let rdp_polygon = rdp(&polygon, 1.0);
-            let rdp_holes = holes.iter().map(|hole| rdp(hole, 1.0)).collect();
-            t1 = triangulate(&rdp_polygon, &Some(rdp_holes)).expect("Error triangulating");
+            let rdp_holes = &holes.iter().map(|hole| rdp(hole, 1.0)).collect();
+            t1 = triangulate(&rdp_polygon, Some(rdp_holes)).expect("Error triangulating");
             t2 = t1.clone();
         }
 
