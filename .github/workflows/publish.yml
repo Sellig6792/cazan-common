@@ -12,8 +12,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@nightly
-        with:
-          toolchain: nightly
       - run: cargo test --workspace --all-features --color=always
 
   bench:
@@ -22,8 +20,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@nightly
-        with:
-          toolchain: nightly
       - run: cargo bench --workspace --all-features --color=always
 
   format_check:
@@ -40,6 +36,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@nightly
+        with:
+          components: clippy
       - run: cargo clippy --workspace --all-features --color=always -- -D warnings
 
   check:
