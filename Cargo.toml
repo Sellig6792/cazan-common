@@ -8,6 +8,7 @@ authors = ["Gilles Meunier <sellig6792@gmail.com>"]
 
 [features]
 wasm = ["wasm-bindgen"]
+nightly-toolchain = []
 
 [dependencies]
 wasm-bindgen = { version = "0.2.92", optional = true }
