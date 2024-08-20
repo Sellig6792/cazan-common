@@ -1,4 +1,4 @@
-#![cfg_attr(TOOLCHAIN_IS_NIGHTLY, feature(test))]
+#![cfg_attr(feature = "_nightly-toolchain", feature(test))]
 #![cfg_attr(target_arch = "wasm32", recursion_limit = "512")]
 
 pub mod geometry;
