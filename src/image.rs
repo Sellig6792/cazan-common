@@ -47,11 +47,17 @@ impl ImagePolygon {
                     .get(y.wrapping_sub(1))
                     .and_then(|row| row.get(x));
                 let down = opaque_points.get(y + 1).and_then(|row| row.get(x));
-
+                if x == 0 || x == self.size.0 as usize || y == 0 || y == self.size.1 as usize {
+                    println!("THERES A BORDER POINT");
+                }
                 if left != Some(&true)
                     || right != Some(&true)
                     || up != Some(&true)
                     || down != Some(&true)
+                    || x == 0
+                    || x == self.size.0 as usize
+                    || y == 0
+                    || y == self.size.1 as usize
                 {
                     edge_points.push(Point {
                         x: x as u16,
